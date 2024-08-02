@@ -45,7 +45,7 @@ You can edit config.json(`./BepInEx/plugins/config.json`) if you don't like defa
 
 ## Contributing
 
-You're free to contribute to IMYSHook as long as the features are useful, such as battle stats log, 360 stamina alert or
+You're free to contribute to IMYSHook as long as the features are useful, such as battle stats log, full AP/BP alert or
 something else, except modifying battle data.
 
 ## Disclaimer
