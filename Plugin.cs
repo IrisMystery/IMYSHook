@@ -15,33 +15,6 @@ public class Plugin : BasePlugin
     {
         Console.OutputEncoding = Encoding.UTF8;
 
-        if (File.Exists("IMYSProxy.exe"))
-        {
-            if (Process.GetProcessesByName("IMYSProxy").Length == 0)
-            {
-                var start = new ProcessStartInfo("IMYSProxy.exe")
-                {
-                    UseShellExecute = true,
-                    CreateNoWindow = false,
-                    WindowStyle = ProcessWindowStyle.Normal
-                };
-                Process.Start(start);
-            }
-
-            Environment.SetEnvironmentVariable("http_proxy", "http://127.0.0.1:8765",
-                EnvironmentVariableTarget.Process);
-            Environment.SetEnvironmentVariable("https_proxy", "http://127.0.0.1:8765",
-                EnvironmentVariableTarget.Process);
-        }
-        else
-        {
-            Environment.SetEnvironmentVariable("http_proxy", "http://127.0.0.1:5678",
-                EnvironmentVariableTarget.Process);
-            Environment.SetEnvironmentVariable("https_proxy", "http://127.0.0.1:5678",
-                EnvironmentVariableTarget.Process);
-        }
-
-
         var log = Log;
         Global.Log = log;
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
