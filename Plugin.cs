@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text;
 using BepInEx;
 using BepInEx.Logging;
 using BepInEx.Unity.IL2CPP;
-using Il2CppSystem.IO;
 
 namespace IMYSHook;
 
