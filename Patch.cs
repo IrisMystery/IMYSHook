@@ -47,7 +47,7 @@ public class Patch
     {
         if (!IMYSConfig.TranslationEnabled) return;
 
-        if (Translation.chapterDicts.ContainsKey(currentAdvId) && line.Contains("「"))
+        if (Translation.chapterDicts.ContainsKey(currentAdvId) && line.Contains("「") && line.EndsWith("」"))
         {
             var idx = line.IndexOf('「');
             var name = line.Substring(0, idx);
@@ -61,7 +61,13 @@ public class Patch
 
             string text_replace;
             if (Translation.chapterDicts[currentAdvId].TryGetValue(text, out text_replace))
-                full += text_replace.IsNullOrWhiteSpace() ? text : text_replace;
+            {
+                text_replace = text_replace.IsNullOrWhiteSpace() ? text : text_replace;
+                text_replace = text_replace.Substring(1, text_replace.Length - 2);
+                text_replace = text_replace.Replace("「", "『").Replace("」", "』");
+                string final_text = "「" + text_replace + "」";
+                full += final_text;
+            }
 
             line = full;
         }
