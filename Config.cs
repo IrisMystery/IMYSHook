@@ -1,6 +1,6 @@
-﻿using System.Text.Json;
-using Il2CppSystem.IO;
-using Il2CppSystem.Text;
+﻿using System.IO;
+using System.Text;
+using System.Text.Json;
 
 namespace IMYSHook;
 
@@ -14,7 +14,7 @@ public class IMYSConfig
     {
         if (File.Exists("./BepInEx/plugins/config.json"))
         {
-            var content = File.InternalReadAllText("./BepInEx/plugins/config.json", Encoding.UTF8);
+            var content = File.ReadAllText("./BepInEx/plugins/config.json", Encoding.UTF8);
             var doc = JsonDocument.Parse(content);
             var config = doc.RootElement;
 

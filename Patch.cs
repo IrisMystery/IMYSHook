@@ -1,9 +1,9 @@
-﻿using System.Text.RegularExpressions;
+﻿using System.IO;
+using System.Text.RegularExpressions;
 using BepInEx;
 using Hachiroku.Novel;
 using Hachiroku.Novel.UI;
 using HarmonyLib;
-using Il2CppSystem.IO;
 using TMPro;
 using UnityEngine;
 
