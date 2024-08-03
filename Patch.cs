@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Text.RegularExpressions;
 using BepInEx;
+using DMM.OLG.Unity.Engine;
 using Hachiroku.Novel;
 using Hachiroku.Novel.UI;
 using HarmonyLib;
@@ -142,5 +143,12 @@ public class Patch
             if (__instance.CharaName) __instance.CharaName.font = TMPTranslateFont;
             if (__instance.Message) __instance.Message.font = TMPTranslateFont;
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(LoginResponse), "Parse")]
+    public static void ParseLoginResp(ref ResponseData res)
+    {
+        Plugin.Global.Log.LogInfo("Account create at: "+res.contents["created_at"].ToString());
     }
 }
