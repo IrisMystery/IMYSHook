@@ -97,9 +97,10 @@ public class PluginBehavior : MonoBehaviour
         }
 
         LastFPSExecuteTime += Time.deltaTime;
-        if (IMYSConfig.FPS > 60 && LastFPSExecuteTime >= WaitTime && Application.targetFrameRate < IMYSConfig.FPS)
+        if (IMYSConfig.FPS >= 30 && LastFPSExecuteTime >= WaitTime && Application.targetFrameRate < IMYSConfig.FPS)
         {
             LastFPSExecuteTime = 0.0f;
+            QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = IMYSConfig.FPS;
             Plugin.Global.Log.LogInfo("FPS changed. Reset to: " + IMYSConfig.FPS);
         }
