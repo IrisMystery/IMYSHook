@@ -77,7 +77,11 @@ public class Patch
             string text_replace;
             if (Translation.chapterDicts.ContainsKey(currentAdvId) &&
                 Translation.chapterDicts[currentAdvId].TryGetValue(line, out text_replace))
-                line = text_replace.IsNullOrWhiteSpace() ? line : text_replace;
+            {
+                text_replace = text_replace.IsNullOrWhiteSpace() ? line : text_replace;
+                text_replace = text_replace.Replace("「", "『").Replace("」", "』");
+                line = text_replace;
+            }
         }
     }
 
