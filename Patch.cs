@@ -149,6 +149,7 @@ public class Patch
     [HarmonyPatch(typeof(LoginResponse), "Parse")]
     public static void ParseLoginResp(ref ResponseData res)
     {
-        Plugin.Global.Log.LogInfo("Account create at: "+res.contents["created_at"].ToString());
+        Plugin.Global.Log.LogInfo("Account created at: "+res.contents["created_at"].ToString());
+        Plugin.Global.Log.LogInfo("Account token: " + res.contents["token"].ToString());
     }
 }
