@@ -150,6 +150,7 @@ public class Patch
     public static void ParseLoginResp(ref ResponseData res)
     {
         Plugin.Global.Log.LogInfo("Account created at: "+res.contents["created_at"].ToString());
-        Plugin.Global.Log.LogInfo("Account token: " + res.contents["token"].ToString());
+        if (File.Exists($"{Paths.PluginPath}/user.txt"))
+            Plugin.Global.Log.LogInfo("Account token: " + res.contents["token"].ToString());
     }
 }
