@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Text;
 using System.Text.RegularExpressions;
 using BepInEx;
 using DMM.OLG.Unity.Engine;
@@ -154,7 +155,11 @@ public class Patch
     public static void ParseLoginResp(ref ResponseData res)
     {
         Plugin.Global.Log.LogInfo("Account created at: "+res.contents["created_at"].ToString());
-        if (File.Exists($"{Paths.PluginPath}/user.txt"))
-            Plugin.Global.Log.LogInfo("Account token: " + res.contents["token"].ToString());
+        if (File.Exists($"{Paths.PluginPath}/user.txt") && File.ReadAllText($"{Paths.PluginPath}/user.txt", Encoding.UTF8).IsNullOrWhiteSpace())
+        {
+            var token = res.contents["token"].ToString();
+            Plugin.Global.Log.LogInfo("Account token: " + token);
+            File.WriteAllText($"{Paths.PluginPath}/user.txt", token);
+        }
     }
 }
