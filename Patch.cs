@@ -1,10 +1,13 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using BepInEx;
 using DMM.OLG.Unity.Engine;
+using Hachiroku;
 using Hachiroku.Novel;
 using Hachiroku.Novel.UI;
+using Hachiroku.Response;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
@@ -161,5 +164,21 @@ public class Patch
             Plugin.Global.Log.LogInfo("Account token: " + token);
             File.WriteAllText($"{Paths.PluginPath}/user.txt", token);
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(UserData), "UpdateData", new Type[] { typeof(CommonUserData) })]
+    public static void UpdateUserData(ref CommonUserData data)
+    {
+        if (!data.recovery_ap_at.IsNullOrWhiteSpace()) Tasker.Set(1, data.recovery_ap_at);
+        if (!data.recovery_bp_at.IsNullOrWhiteSpace()) Tasker.Set(2, data.recovery_bp_at);
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(ExpeditionInfo), "Parse", new Type[] { typeof(MypageResponse) })]
+    public static void ExpeditionParse(ref MypageResponse response)
+    {
+        if (!response.contents.expedition.expedition_schedule_at.IsNullOrWhiteSpace()) 
+            Tasker.Set(3, response.contents.expedition.expedition_schedule_at);
     }
 }
