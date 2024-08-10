@@ -10,6 +10,8 @@ Iris Mysteria mod for DMM Game Player version
 2. In-game Screenshot
 3. FPS setting
 4. [Translation](Translation.md) (Traditional Chinese only)
+5. Show account creation date
+6. AP/BP Full or Expedition finish notification
 
 ## Requirement
 
