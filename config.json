@@ -2,5 +2,5 @@
     "speed": 0.5,
     "fps": 60,
     "translation": true,
-    "zhHansCharacter":false
+    "zhHans":false
 }
