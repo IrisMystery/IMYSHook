@@ -27,6 +27,13 @@ public class Translation
             var body = responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
 
             nameDicts = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+            if (IMYSConfig.zhHans)
+            {
+                foreach (var (key, value) in nameDicts)
+                {
+                    nameDicts[key] = ChineseConverter.Convert(value, ChineseConversionDirection.TraditionalToSimplified);
+                }
+            }
             Plugin.Global.Log.LogInfo("[Translator] Character name translation loaded. Total: " + nameDicts.Count);
         }
         else
@@ -67,13 +74,10 @@ public class Translation
 
             if (IMYSConfig.zhHans)
             {
-                var tmpDict = new Dictionary<string, string>();
                 foreach (var (key, value) in chapterDicts[label])
                 {
-                    tmpDict[key] = ChineseConverter.Convert(value, ChineseConversionDirection.TraditionalToSimplified);
+                    chapterDicts[label][key] = ChineseConverter.Convert(value, ChineseConversionDirection.TraditionalToSimplified);
                 }
-
-                chapterDicts[label] = tmpDict;
             }
 
             Plugin.Global.Log.LogInfo("[Translator] Chapter translation loaded. Total: " + chapterDicts[label].Count);
