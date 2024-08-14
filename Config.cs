@@ -10,6 +10,8 @@ public class IMYSConfig
     public static int FPS;
     public static bool TranslationEnabled;
 
+    public static bool zhHans;
+
     public static void Read()
     {
         if (File.Exists("./BepInEx/plugins/config.json"))
@@ -50,12 +52,21 @@ public class IMYSConfig
                 needWrite = true;
             }
 
-            if (needWrite) WriteJsonFile(Speed, FPS, TranslationEnabled);
+            if (config.TryGetProperty("zhHans", out var cValue))
+            {
+                zhHans = cValue.GetBoolean();
+            }
+            else
+            {
+                zhHans = false;
+            }
+            if (needWrite) WriteJsonFile(Speed, FPS, TranslationEnabled,zhHans);
 
             Plugin.Global.Log.LogInfo("Current setting:");
             Plugin.Global.Log.LogInfo("Game speed(each step): " + Speed);
             Plugin.Global.Log.LogInfo("FPS: " + FPS);
             Plugin.Global.Log.LogInfo("Translation: " + (TranslationEnabled ? "Enabled" : "Disabled"));
+            Plugin.Global.Log.LogInfo("zhHans: " + (zhHans ? "Enabled" : "Disabled"));
         }
         else
         {
@@ -66,17 +77,18 @@ public class IMYSConfig
             TranslationEnabled = true;
 
             // Create default JSON file
-            WriteJsonFile(0.5, 60, true);
+            WriteJsonFile(0.5, 60, true,false);
         }
     }
 
-    public static void WriteJsonFile(double speed, int fps, bool enabled)
+    public static void WriteJsonFile(double speed, int fps, bool enabled, bool zhHans)
     {
         var config = new config
         {
             speed = speed,
             fps = fps,
-            translation = enabled
+            translation = enabled,
+            zhHans = zhHans
         };
 
         var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
@@ -88,5 +100,6 @@ public class IMYSConfig
         public double speed { get; set; }
         public int fps { get; set; }
         public bool translation { get; set; }
+        public bool zhHans { get; set; }
     }
 }

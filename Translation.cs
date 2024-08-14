@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Microsoft.International.Converters.TraditionalChineseToSimplifiedConverter;
 
 namespace IMYSHook;
 
@@ -43,7 +44,7 @@ public class Translation
             var body2 = responseContent2.ReadAsStringAsync().GetAwaiter().GetResult();
 
             var subNameDicts = JsonSerializer.Deserialize<Dictionary<string, string>>(body2);
-            subNameDicts.ToList().ForEach(x => nameDicts.Add(x.Key, x.Value));
+            subNameDicts.ToList().ForEach(x => nameDicts.Add(x.Key, IMYSConfig.zhHans ? ChineseConverter.Convert(x.Value, ChineseConversionDirection.TraditionalToSimplified) : x.Value));
             Plugin.Global.Log.LogInfo("[Translator] Rando name translation loaded. Total: " + subNameDicts.Count);
         }
         else
@@ -63,6 +64,18 @@ public class Translation
             var body = responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
 
             chapterDicts[label] = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+
+            if (IMYSConfig.zhHans)
+            {
+                var tmpDict = new Dictionary<string, string>();
+                foreach (var (key, value) in chapterDicts[label])
+                {
+                    tmpDict[key] = ChineseConverter.Convert(value, ChineseConversionDirection.TraditionalToSimplified);
+                }
+
+                chapterDicts[label] = tmpDict;
+            }
+
             Plugin.Global.Log.LogInfo("[Translator] Chapter translation loaded. Total: " + chapterDicts[label].Count);
         }
         else

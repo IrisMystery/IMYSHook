@@ -9,7 +9,7 @@ Iris Mysteria mod for DMM Game Player version
 1. Game speed
 2. In-game Screenshot
 3. FPS setting
-4. [Translation](Translation.md) (Traditional Chinese only)
+4. [Translation](Translation.md) 
 
 ## Requirement
 
