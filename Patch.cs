@@ -73,6 +73,10 @@ public class Patch
                 string final_text = "「" + text_replace + "」";
                 full += final_text;
             }
+            else
+            {
+                full += text;
+            }
 
             line = full;
         }
