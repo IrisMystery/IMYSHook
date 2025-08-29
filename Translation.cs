@@ -2,30 +2,37 @@
 using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace IMYSHook;
 
 public class Translation
 {
+    public static HttpClient client = new();
     public static Dictionary<string, string> nameDicts = new();
     public static Dictionary<string, Dictionary<string, string>> chapterDicts = new();
 
-    public static void Init()
+    static Translation()
+    {
+        client.DefaultRequestHeaders.UserAgent.ParseAdd($"{MyPluginInfo.PLUGIN_NAME}/{MyPluginInfo.PLUGIN_VERSION}");
+    }
+
+    public static async Task InitAsync(CancellationToken cancellationToken = default)
     {
         if (!IMYSConfig.TranslationEnabled) return;
 
         var response =
-            HttpRequester(
-                "https://translation.lolida.best/download/imys/imys_name/zh_Hant/?format=json");
+            await client.GetAsync(
+                "https://translation.lolida.best/download/imys/imys_name/zh_Hant/?format=json", cancellationToken);
         if (response.IsSuccessStatusCode)
         {
             var responseContent = response.Content;
-            var body = responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            nameDicts = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+            nameDicts = await responseContent.ReadFromJsonAsync<Dictionary<string, string>>(options: null, cancellationToken);
             Plugin.Global.Log.LogInfo("[Translator] Character name translation loaded. Total: " + nameDicts.Count);
         }
         else
@@ -35,14 +42,13 @@ public class Translation
         }
 
         var response2 =
-            HttpRequester(
-                "https://translation.lolida.best/download/imys/imys_subname/zh_Hant/?format=json");
+            await client.GetAsync(
+                "https://translation.lolida.best/download/imys/imys_subname/zh_Hant/?format=json", cancellationToken);
         if (response2.IsSuccessStatusCode)
         {
             var responseContent2 = response2.Content;
-            var body2 = responseContent2.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            var subNameDicts = JsonSerializer.Deserialize<Dictionary<string, string>>(body2);
+            var subNameDicts = await responseContent2.ReadFromJsonAsync<Dictionary<string, string>>(options: null, cancellationToken);
             subNameDicts.ToList().ForEach(x => nameDicts.Add(x.Key, x.Value));
             Plugin.Global.Log.LogInfo("[Translator] Rando name translation loaded. Total: " + subNameDicts.Count);
         }
@@ -53,16 +59,15 @@ public class Translation
         }
     }
 
-    public static void FetchChapterTranslation(string label)
+    public static async Task FetchChapterTranslationAsync(string label, CancellationToken cancellationToken = default)
     {
         var response =
-            HttpRequester("https://translation.lolida.best/download/imys/" + label + "/zh_Hant/?format=json");
+            await client.GetAsync("https://translation.lolida.best/download/imys/" + label + "/zh_Hant/?format=json", cancellationToken);
         if (response.IsSuccessStatusCode)
         {
             var responseContent = response.Content;
-            var body = responseContent.ReadAsStringAsync().GetAwaiter().GetResult();
 
-            chapterDicts[label] = JsonSerializer.Deserialize<Dictionary<string, string>>(body);
+            chapterDicts[label] = await responseContent.ReadFromJsonAsync<Dictionary<string, string>>(options: null, cancellationToken);
             Plugin.Global.Log.LogInfo("[Translator] Chapter translation loaded. Total: " + chapterDicts[label].Count);
         }
         else
@@ -71,15 +76,5 @@ public class Translation
             Plugin.Global.Log.LogWarning(
                 "[Translator] Chapter translation failed to load, chapter text wouldn't translate.");
         }
-    }
-
-    public static HttpResponseMessage HttpRequester(string url)
-    {
-        var client = new HttpClient();
-        client.DefaultRequestHeaders.UserAgent.ParseAdd(MyPluginInfo.PLUGIN_NAME + "/" + MyPluginInfo.PLUGIN_VERSION);
-        var task = Task.Run(() => client.GetAsync(url));
-        task.Wait();
-
-        return task.Result;
     }
 }

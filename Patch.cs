@@ -40,7 +40,7 @@ public class Patch
 
         currentAdvId = __instance.Linker.ScenarioId;
 
-        if (!Translation.chapterDicts.ContainsKey(currentAdvId)) Translation.FetchChapterTranslation(currentAdvId);
+        if (!Translation.chapterDicts.ContainsKey(currentAdvId)) Translation.FetchChapterTranslationAsync(currentAdvId).Wait();
         Plugin.Global.Log.LogInfo(currentAdvId);
     }
 

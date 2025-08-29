@@ -18,7 +18,7 @@ public class Plugin : BasePlugin
         Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
 
         IMYSConfig.Read();
-        Translation.Init();
+        Translation.InitAsync().Wait();
         Patch.Initialize();
 
         AddComponent<PluginBehavior>();
