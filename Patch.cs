@@ -178,7 +178,10 @@ public class Patch
     [HarmonyPatch(typeof(ExpeditionInfo), "Parse", new Type[] { typeof(MypageResponse) })]
     public static void ExpeditionParse(ref MypageResponse response)
     {
-        if (!response.contents.expedition.expedition_schedule_at.IsNullOrWhiteSpace()) 
-            Tasker.Set(3, response.contents.expedition.expedition_schedule_at);
+        foreach (var at in response.contents.expedition.schedule_at_list)
+        {
+            Tasker.Set(3, at);
+            break;
+        }
     }
 }
