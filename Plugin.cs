@@ -11,7 +11,10 @@ public class Plugin : BasePlugin
 {
     public override void Load()
     {
-        Console.OutputEncoding = Encoding.UTF8;
+        if (Console.LargestWindowWidth > 0)
+        {
+            Console.OutputEncoding = Encoding.UTF8;
+        }
 
         var log = Log;
         Global.Log = log;
