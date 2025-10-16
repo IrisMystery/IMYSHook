@@ -2,22 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-    <AssemblyName>IMYSHook</AssemblyName>
-    <Description>IMYSHook</Description>
+    <AssemblyName>IMYSHook-melon</AssemblyName>
+    <Description>melonloader implementation of IMYSHook</Description>
     <Version>1.0.6</Version>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>latest</LangVersion>
-    <RestoreAdditionalProjectSources>
-      https://api.nuget.org/v3/index.json;
-      https://nuget.bepinex.dev/v3/index.json
-    </RestoreAdditionalProjectSources>
     <RootNamespace>IMYSHook</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
-    <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="HarmonyX" Version="2.10.2" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -26,11 +19,11 @@
 
   <ItemGroup>
     <GameDlls Include="
-		      $(GamePath)\BepInEx\interop\Assembly-CSharp.dll;
-		      $(GamePath)\BepInEx\interop\Newtonsoft.Json.dll;
-		      $(GamePath)\BepInEx\interop\Il2Cpp*.dll;
-		      $(GamePath)\BepInEx\interop\spine-*.dll;
-		      $(GamePath)\BepInEx\interop\Unity*.dll">
+          $(GamePath)\MelonLoader\net6\*.dll;
+		      $(GamePath)\MelonLoader\Il2CppAssemblies\Assembly-CSharp.dll;
+		      $(GamePath)\MelonLoader\Il2CppAssemblies\Il2Cpp*.dll;
+		      $(GamePath)\MelonLoader\Il2CppAssemblies\spine-*.dll;
+		      $(GamePath)\MelonLoader\Il2CppAssemblies\Unity*.dll">
     </GameDlls>
     <Reference Include="@(GameDlls)">
       <Private>false</Private>

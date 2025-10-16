@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Text;
-using BepInEx;
-using BepInEx.Logging;
-using BepInEx.Unity.IL2CPP;
+// using Il2CppInterop.Runtime.Injection;
+using MelonLoader;
+// using UnityEngine;
+
+[assembly: MelonInfo(typeof(IMYSHook.Plugin), "IMYSHook-melon", "1.0.6", "IMYSHook")]
 
 namespace IMYSHook;
 
-[BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
-public class Plugin : BasePlugin
+public class Plugin : MelonMod
 {
-    public override void Load()
+    public override void OnInitializeMelon()
     {
         if (Console.LargestWindowWidth > 0)
         {
             Console.OutputEncoding = Encoding.UTF8;
         }
 
-        var log = Log;
+        var log = LoggerInstance;
         Global.Log = log;
-        Log.LogInfo($"Plugin {MyPluginInfo.PLUGIN_GUID} is loaded!");
+        log.Msg($"Plugin IMYSHook is loaded!");
 
         IMYSConfig.Read();
         Translation.InitAsync().Wait();
         Patch.Initialize();
 
-        AddComponent<PluginBehavior>();
+        ClassInjector.RegisterTypeInIl2Cpp<PluginBehavior>();
+        GameObject melonModObject = new GameObject("ModHost");
+        melonModObject.AddComponent<PluginBehavior>();
+        UnityEngine.Object.DontDestroyOnLoad(melonModObject);
+        
     }
 
     public class Global
     {
-        public static ManualLogSource Log { get; set; }
+        public static MelonLogger.Instance Log { get; set; }
     }
 }

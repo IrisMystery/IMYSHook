@@ -21,7 +21,7 @@ public class PluginBehavior : MonoBehaviour
             LastGSExecuteTime = Time.deltaTime;
             var currSpeed = Time.timeScale.ToString();
             var text = "Game speed increased. Current: " + currSpeed + "x";
-            Plugin.Global.Log.LogInfo(text);
+            Plugin.Global.Log.Msg(text);
 
             Notification.Popup("Game Speed", text);
         }
@@ -34,7 +34,7 @@ public class PluginBehavior : MonoBehaviour
             LastGSExecuteTime = Time.deltaTime;
             var currSpeed = Time.timeScale.ToString();
             var text = "Game speed decreased. Current: " + currSpeed + "x";
-            Plugin.Global.Log.LogInfo(text);
+            Plugin.Global.Log.Msg(text);
 
             Notification.Popup("Game Speed", text);
         }
@@ -46,7 +46,7 @@ public class PluginBehavior : MonoBehaviour
             IsGameSpeedChanged = (int)Time.timeScale != 1;
             var currSpeed = Time.timeScale.ToString();
             var text = "Game speed restored. Current: " + currSpeed + "x";
-            Plugin.Global.Log.LogInfo(text);
+            Plugin.Global.Log.Msg(text);
 
             Notification.Popup("Game Speed", text);
         }
@@ -59,7 +59,7 @@ public class PluginBehavior : MonoBehaviour
             LastGSExecuteTime = Time.deltaTime;
             var currSpeed = Time.timeScale.ToString();
             var text = "Game speed freezed. Current: " + currSpeed + "x";
-            Plugin.Global.Log.LogInfo(text);
+            Plugin.Global.Log.Msg(text);
 
             Notification.Popup("Game Speed", text);
         }
@@ -67,14 +67,14 @@ public class PluginBehavior : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.F10))
         {
             Translation.chapterDicts = new();
-            Plugin.Global.Log.LogInfo("[Translator] cache cleared.");
+            Plugin.Global.Log.Msg("[Translator] cache cleared.");
             Notification.Popup("Translation", "Translation cache cleared.");
         }
 
         if (Input.GetKeyDown(KeyCode.F11))
         {
             IMYSConfig.TranslationEnabled = !IMYSConfig.TranslationEnabled;
-            Plugin.Global.Log.LogInfo("Translation: " + (IMYSConfig.TranslationEnabled ? "Enabled" : "Disabled"));
+            Plugin.Global.Log.Msg("Translation: " + (IMYSConfig.TranslationEnabled ? "Enabled" : "Disabled"));
             Notification.Popup("Translation", IMYSConfig.TranslationEnabled ? "Enabled" : "Disabled");
         }
 
@@ -93,7 +93,7 @@ public class PluginBehavior : MonoBehaviour
         {
             LastGSExecuteTime = 0.0f;
             Time.timeScale = CurrentGameSpeed;
-            Plugin.Global.Log.LogInfo("Game speed changed. Reset to: " + CurrentGameSpeed + "x");
+            Plugin.Global.Log.Msg("Game speed changed. Reset to: " + CurrentGameSpeed + "x");
         }
 
         LastFPSExecuteTime += Time.deltaTime;
@@ -102,7 +102,7 @@ public class PluginBehavior : MonoBehaviour
             LastFPSExecuteTime = 0.0f;
             QualitySettings.vSyncCount = 0;
             Application.targetFrameRate = IMYSConfig.FPS;
-            Plugin.Global.Log.LogInfo("FPS changed. Reset to: " + IMYSConfig.FPS);
+            Plugin.Global.Log.Msg("FPS changed. Reset to: " + IMYSConfig.FPS);
         }
     }
 }

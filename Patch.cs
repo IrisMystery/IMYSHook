@@ -2,14 +2,13 @@
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using BepInEx;
-using DMM.OLG.Unity.Engine;
-using Hachiroku;
-using Hachiroku.Novel;
-using Hachiroku.Novel.UI;
-using Hachiroku.Response;
+using Il2CppDMM.OLG.Unity.Engine;
+using Il2CppHachiroku;
+using Il2CppHachiroku.Novel;
+using Il2CppHachiroku.Novel.UI;
+using Il2CppHachiroku.Response;
 using HarmonyLib;
-using TMPro;
+using Il2CppTMPro;
 using UnityEngine;
 
 namespace IMYSHook;
@@ -19,10 +18,12 @@ public class Patch
     private static string currentAdvId;
     public static string fontName = "notosanscjktc";
     public static TMP_FontAsset TMPTranslateFont;
+    private static HarmonyLib.Harmony harmonyInstance;
 
     public static void Initialize()
     {
-        Harmony.CreateAndPatchAll(typeof(Patch));
+        harmonyInstance = new HarmonyLib.Harmony("IMYSHook-melon");
+        harmonyInstance.PatchAll(typeof(Patch));
     }
 
     [HarmonyPostfix]
@@ -31,9 +32,9 @@ public class Patch
     {
         if (!IMYSConfig.TranslationEnabled) return;
 
-        if (TMPTranslateFont == null && File.Exists($"{Paths.PluginPath}/font/{fontName}"))
+        if (TMPTranslateFont == null && File.Exists($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/font/{fontName}"))
         {
-            var ab = AssetBundle.LoadFromFile($"{Paths.PluginPath}/font/{fontName}");
+            var ab = AssetBundle.LoadFromFile($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/font/{fontName}");
             TMPTranslateFont = ab.LoadAsset<TMP_FontAsset>(fontName + " SDF");
             ab.Unload(false);
         }
@@ -41,7 +42,7 @@ public class Patch
         currentAdvId = __instance.Linker.ScenarioId;
 
         if (!Translation.chapterDicts.ContainsKey(currentAdvId)) Translation.FetchChapterTranslationAsync(currentAdvId).Wait();
-        Plugin.Global.Log.LogInfo(currentAdvId);
+        Plugin.Global.Log.Msg(currentAdvId);
     }
 
     // Message
@@ -62,12 +63,12 @@ public class Patch
 
             string name_replace;
             if (Translation.nameDicts.TryGetValue(name, out name_replace))
-                full = name_replace.IsNullOrWhiteSpace() ? text : name_replace;
+                full = string.IsNullOrWhiteSpace(name_replace) ? text : name_replace;
 
             string text_replace;
             if (Translation.chapterDicts[currentAdvId].TryGetValue(text, out text_replace))
             {
-                text_replace = text_replace.IsNullOrWhiteSpace() ? text : text_replace;
+                text_replace = string.IsNullOrWhiteSpace(text_replace) ? text : text_replace;
                 text_replace = text_replace.Substring(1, text_replace.Length - 2);
                 text_replace = text_replace.Replace("「", "『").Replace("」", "』");
                 string final_text = "「" + text_replace + "」";
@@ -86,7 +87,7 @@ public class Patch
             if (Translation.chapterDicts.ContainsKey(currentAdvId) &&
                 Translation.chapterDicts[currentAdvId].TryGetValue(line, out text_replace))
             {
-                text_replace = text_replace.IsNullOrWhiteSpace() ? line : text_replace;
+                text_replace = string.IsNullOrWhiteSpace(text_replace) ? line : text_replace;
                 text_replace = text_replace.Replace("「", "『").Replace("」", "』");
                 line = text_replace;
             }
@@ -113,7 +114,7 @@ public class Patch
                     if (Translation.chapterDicts.ContainsKey(currentAdvId) && Translation.chapterDicts[currentAdvId]
                             .TryGetValue(options[i2], out text_replace))
                     {
-                        var option_tr = text_replace.IsNullOrWhiteSpace() ? options[i2] : text_replace;
+                        var option_tr = string.IsNullOrWhiteSpace(text_replace) ? options[i2] : text_replace;
                         param = param.Replace(options[i2], option_tr);
                     }
                 }
@@ -161,12 +162,12 @@ public class Patch
     [HarmonyPatch(typeof(LoginResponse), "Parse")]
     public static void ParseLoginResp(ref ResponseData res)
     {
-        Plugin.Global.Log.LogInfo("Account created at: "+res.contents["created_at"].ToString());
-        if (File.Exists($"{Paths.PluginPath}/user.txt") && File.ReadAllText($"{Paths.PluginPath}/user.txt", Encoding.UTF8).IsNullOrWhiteSpace())
+        Plugin.Global.Log.Msg("Account created at: " + res.contents["created_at"].ToString());
+        if (File.Exists($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/user.txt") && string.IsNullOrWhiteSpace(File.ReadAllText($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/user.txt", Encoding.UTF8)))
         {
             var token = res.contents["token"].ToString();
-            Plugin.Global.Log.LogInfo("Account token: " + token);
-            File.WriteAllText($"{Paths.PluginPath}/user.txt", token);
+            Plugin.Global.Log.Msg("Account token: " + token);
+            File.WriteAllText($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/user.txt", token);
         }
     }
 
@@ -174,8 +175,8 @@ public class Patch
     [HarmonyPatch(typeof(UserData), "UpdateData", new Type[] { typeof(CommonUserData) })]
     public static void UpdateUserData(ref CommonUserData data)
     {
-        if (!data.recovery_ap_at.IsNullOrWhiteSpace()) Tasker.Set(1, data.recovery_ap_at);
-        if (!data.recovery_bp_at.IsNullOrWhiteSpace()) Tasker.Set(2, data.recovery_bp_at);
+        if (!string.IsNullOrWhiteSpace(data.recovery_ap_at)) Tasker.Set(1, data.recovery_ap_at);
+        if (!string.IsNullOrWhiteSpace(data.recovery_ap_at)) Tasker.Set(2, data.recovery_bp_at);
     }
 
     [HarmonyPrefix]

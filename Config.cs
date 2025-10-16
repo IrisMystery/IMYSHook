@@ -1,4 +1,4 @@
-﻿using BepInEx;
+﻿
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -13,9 +13,9 @@ public class IMYSConfig
 
     public static void Read()
     {
-        if (File.Exists($"{Paths.PluginPath}/config.json"))
+        if (File.Exists($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/config.json"))
         {
-            var content = File.ReadAllText($"{Paths.PluginPath}/config.json", Encoding.UTF8);
+            var content = File.ReadAllText($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/config.json", Encoding.UTF8);
             var doc = JsonDocument.Parse(content);
             var config = doc.RootElement;
 
@@ -53,15 +53,15 @@ public class IMYSConfig
 
             if (needWrite) WriteJsonFile(Speed, FPS, TranslationEnabled);
 
-            Plugin.Global.Log.LogInfo("Current setting:");
-            Plugin.Global.Log.LogInfo("Game speed(each step): " + Speed);
-            Plugin.Global.Log.LogInfo("FPS: " + FPS);
-            Plugin.Global.Log.LogInfo("Translation: " + (TranslationEnabled ? "Enabled" : "Disabled"));
+            Plugin.Global.Log.Msg("Current setting:");
+            Plugin.Global.Log.Msg("Game speed(each step): " + Speed);
+            Plugin.Global.Log.Msg("FPS: " + FPS);
+            Plugin.Global.Log.Msg("Translation: " + (TranslationEnabled ? "Enabled" : "Disabled"));
         }
         else
         {
-            Plugin.Global.Log.LogWarning("config.json not found!!!");
-            Plugin.Global.Log.LogWarning("Using default config.");
+            Plugin.Global.Log.Warning("config.json not found!!!");
+            Plugin.Global.Log.Warning("Using default config.");
             Speed = 0.5;
             FPS = 60;
             TranslationEnabled = true;
@@ -81,7 +81,7 @@ public class IMYSConfig
         };
 
         var json = JsonSerializer.Serialize(config, new JsonSerializerOptions { WriteIndented = true });
-        File.WriteAllText($"{Paths.PluginPath}/config.json", json);
+        File.WriteAllText($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/config.json", json);
     }
 
     public class config
