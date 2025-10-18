@@ -11,7 +11,7 @@ public class PluginBehavior : MonoBehaviour
     private static float LastGSExecuteTime { get; set; }
     private static float LastFPSExecuteTime { get; set; }
 
-    private void Update()
+    void Update()
     {
         if (Input.GetKeyDown(KeyCode.F8))
         {
