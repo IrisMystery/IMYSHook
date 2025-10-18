@@ -10,7 +10,10 @@ namespace IMYSHook;
 
 public class Translation
 {
-    public static HttpClient client = new();
+    public static HttpClient client = new(new HttpClientHandler()
+    {
+        ServerCertificateCustomValidationCallback = delegate { return true; },
+    });
     public static Dictionary<string, string> nameDicts = new();
     public static Dictionary<string, Dictionary<string, string>> chapterDicts = new();
 
