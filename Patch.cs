@@ -1,12 +1,9 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using Il2CppDMM.OLG.Unity.Engine;
-using Il2CppHachiroku;
 using Il2CppHachiroku.Novel;
 using Il2CppHachiroku.Novel.UI;
-using Il2CppHachiroku.Response;
 using HarmonyLib;
 using Il2CppTMPro;
 using UnityEngine;
@@ -18,12 +15,10 @@ public class Patch
     private static string currentAdvId;
     public static string fontName = "notosanscjktc";
     public static TMP_FontAsset TMPTranslateFont;
-    private static HarmonyLib.Harmony harmonyInstance;
 
     public static void Initialize()
     {
-        harmonyInstance = new HarmonyLib.Harmony("IMYSHook-melon");
-        harmonyInstance.PatchAll(typeof(Patch));
+        HarmonyLib.Harmony.CreateAndPatchAll(typeof(Patch));
     }
 
     [HarmonyPostfix]
@@ -168,25 +163,6 @@ public class Patch
             var token = res.contents["token"].ToString();
             Plugin.Global.Log.Msg("Account token: " + token);
             File.WriteAllText($"{MelonLoader.Utils.MelonEnvironment.ModsDirectory}/user.txt", token);
-        }
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(UserData), "UpdateData", new Type[] { typeof(CommonUserData) })]
-    public static void UpdateUserData(ref CommonUserData data)
-    {
-        if (!string.IsNullOrWhiteSpace(data.recovery_ap_at)) Tasker.Set(1, data.recovery_ap_at);
-        if (!string.IsNullOrWhiteSpace(data.recovery_ap_at)) Tasker.Set(2, data.recovery_bp_at);
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(ExpeditionInfo), "Parse", new Type[] { typeof(MypageResponse) })]
-    public static void ExpeditionParse(ref MypageResponse response)
-    {
-        foreach (var at in response.contents.expedition.schedule_at_list)
-        {
-            Tasker.Set(3, at);
-            break;
         }
     }
 }
