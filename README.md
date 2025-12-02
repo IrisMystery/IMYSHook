@@ -27,11 +27,12 @@ location `C:\Users\<username>\imys_r_exe`
 
 You can edit config.json(`./BepInEx/plugins/config.json`) if you don't like default settings.
 
-| Name      | Default Value | Description                                        |
-|-----------|---------------|----------------------------------------------------|
-| speed     | 0.5           | Increase/Decrease game speed each step (per click) | 
-| fps       | 60            | Override FPS setting                               |
-| translate | true          | Enable/Disable translation feature                 |
+| Name          | Default Value | Description                                        |
+|---------------|---------------|----------------------------------------------------|
+| speed         | 0.5           | Increase/Decrease game speed each step (per click) |
+| fps           | 60            | Override FPS setting                               |
+| translate     | true          | Enable/Disable translation feature                 |
+| DoNotVoiceCut | false         | Is block voice-cut inside game                     |
 
 ## Key binding
 

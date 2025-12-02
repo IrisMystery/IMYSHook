@@ -161,7 +161,7 @@ public class Patch
     [HarmonyPatch(typeof(LoginResponse), "Parse")]
     public static void ParseLoginResp(ref ResponseData res)
     {
-        Plugin.Global.Log.LogInfo("Account created at: "+res.contents["created_at"].ToString());
+        Plugin.Global.Log.LogInfo("Account created at: " + res.contents["created_at"].ToString());
         if (File.Exists($"{Paths.PluginPath}/user.txt") && File.ReadAllText($"{Paths.PluginPath}/user.txt", Encoding.UTF8).IsNullOrWhiteSpace())
         {
             var token = res.contents["token"].ToString();
@@ -187,5 +187,20 @@ public class Patch
             Tasker.Set(3, at);
             break;
         }
+    }
+
+    [HarmonyPrefix]
+    [HarmonyPatch(typeof(AdvSoundPlayer), "StopSoundHelperVoice")]
+    public static bool StopSoundHelperVoice(ref AdvSoundPlayer __instance)
+    {
+        if (IMYSConfig.DoNotVoiceCut)
+        {
+            var novelRoot = GameObject.FindObjectOfType<NovelRoot>();
+            if (novelRoot == null) return true;
+            if (novelRoot._facilitator._LastVoiceName.IsNullOrWhiteSpace())
+                return false;
+            return true;
+        }
+        else return true;
     }
 }
