@@ -171,25 +171,6 @@ public class Patch
     }
 
     [HarmonyPrefix]
-    [HarmonyPatch(typeof(UserData), "UpdateData", new Type[] { typeof(CommonUserData) })]
-    public static void UpdateUserData(ref CommonUserData data)
-    {
-        if (!data.recovery_ap_at.IsNullOrWhiteSpace()) Tasker.Set(1, data.recovery_ap_at);
-        if (!data.recovery_bp_at.IsNullOrWhiteSpace()) Tasker.Set(2, data.recovery_bp_at);
-    }
-
-    [HarmonyPrefix]
-    [HarmonyPatch(typeof(ExpeditionInfo), "Parse", new Type[] { typeof(MypageResponse) })]
-    public static void ExpeditionParse(ref MypageResponse response)
-    {
-        foreach (var at in response.contents.expedition.schedule_at_list)
-        {
-            Tasker.Set(3, at);
-            break;
-        }
-    }
-
-    [HarmonyPrefix]
     [HarmonyPatch(typeof(AdvSoundPlayer), "StopSoundHelperVoice")]
     public static bool StopSoundHelperVoice(ref AdvSoundPlayer __instance)
     {
