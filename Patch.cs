@@ -1,13 +1,10 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using BepInEx;
 using DMM.OLG.Unity.Engine;
-using Hachiroku;
 using Hachiroku.Novel;
 using Hachiroku.Novel.UI;
-using Hachiroku.Response;
 using HarmonyLib;
 using TMPro;
 using UnityEngine;
