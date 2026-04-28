@@ -33,7 +33,7 @@ public class Patch
 
         if (TMPTranslateFont == null && File.Exists($"{Paths.PluginPath}/font/{fontName}"))
         {
-            var ab = AssetBundle.LoadFromFile($"{Paths.PluginPath}/font/{fontName}");
+            var ab = AssetBundle.LoadFromMemory(File.ReadAllBytes($"{Paths.PluginPath}/font/{fontName}"));
             TMPTranslateFont = ab.LoadAsset<TMP_FontAsset>(fontName + " SDF");
             ab.Unload(false);
         }
