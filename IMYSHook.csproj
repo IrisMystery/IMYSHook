@@ -17,7 +17,7 @@
   <ItemGroup>
     <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be.*" IncludeAssets="compile" />
     <PackageReference Include="BepInEx.PluginInfoProps" Version="2.*" />
-    <PackageReference Include="HarmonyX" Version="2.10.2" />
+    <PackageReference Include="HarmonyX" Version="2.16.1" />
   </ItemGroup>
 
   <PropertyGroup>
@@ -26,11 +26,11 @@
 
   <ItemGroup>
     <GameDlls Include="
-		      $(GamePath)\BepInEx\interop\Assembly-CSharp.dll;
-		      $(GamePath)\BepInEx\interop\Newtonsoft.Json.dll;
-		      $(GamePath)\BepInEx\interop\Il2Cpp*.dll;
-		      $(GamePath)\BepInEx\interop\spine-*.dll;
-		      $(GamePath)\BepInEx\interop\Unity*.dll">
+              $(GamePath)\BepInEx\interop\Assembly-CSharp.dll;
+              $(GamePath)\BepInEx\interop\Newtonsoft.Json.dll;
+              $(GamePath)\BepInEx\interop\Il2Cpp*.dll;
+              $(GamePath)\BepInEx\interop\spine-*.dll;
+              $(GamePath)\BepInEx\interop\Unity*.dll">
     </GameDlls>
     <Reference Include="@(GameDlls)">
       <Private>false</Private>
