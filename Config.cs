@@ -56,6 +56,11 @@ public class IMYSConfig
             {
                 DoNotVoiceCut = vValue.GetBoolean();
             }
+            else
+            {
+                DoNotVoiceCut = false;
+                needWrite = true;
+            }
 
             if (needWrite) WriteJsonFile(Speed, FPS, TranslationEnabled, DoNotVoiceCut);
 
